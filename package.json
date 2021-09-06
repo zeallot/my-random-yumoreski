@@ -1,0 +1,13 @@
+{
+  "name": "aneks-parser",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "mongodb": "^4.1.1",
+    "node-telegram-bot-api": "^0.54.0"
+  },
+  "devDependencies": {
+    "easyvk": "^2.8.2"
+  }
+}
