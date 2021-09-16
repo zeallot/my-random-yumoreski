@@ -49,8 +49,7 @@ const writeMany = (jokeList) => {
 const getRandomJoke = () => (
     start()
     .then(async () => {
-        const joke = await jokes.aggregate([{ $sample: { size: 1 } }]).next();
-        return joke;
+        return await jokes.aggregate([{$sample: {size: 1}}]).next();
     })
     .then((joke) => {
         client.close();
@@ -65,12 +64,19 @@ const getRandomJoke = () => (
 
 const getRandomJokeWithConnectedDb = async () => {
     try {
-        const joke = await jokes.aggregate([{ $sample: { size: 1 } }]).next();
-        return joke;
+        return await jokes.aggregate([{$sample: {size: 1}}]).next();
     } catch (e) {
         console.log(e);
     }
 };
+
+const getStatisticWithConnectedDb = async () =>{
+    try {
+        return await statistic.findOne({id: 1});
+    } catch (e) {
+        console.log(e);
+    }
+}
 
 
 const incMessageCount = () => {
@@ -104,4 +110,5 @@ module.exports = {
     connectToMongo: start,
     incMessageCount,
     incMessageCountWithConnectedDb,
+    getStatisticWithConnectedDb,
 };
