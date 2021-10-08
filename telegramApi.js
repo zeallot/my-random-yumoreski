@@ -59,7 +59,27 @@ const listenMessages = () => connectToMongo().then(() => {
                     await bot.sendMessage(chatId, responseMessages.default);
                 }
                 break;
-            case('/roll' || '/roll@random_yumoreski_bot'):
+            case('/roll'):
+                const { textt, photoo } = await getRandomJokeWithConnectedDb();
+
+                if (photoo) {
+                    bot.sendPhoto(chatId, photoo, { caption: textt })
+                      .then(() => bot.sendMessage(chatId, responseMessages.anotherOne))
+                      .catch(e => {
+                          console.log(new Date(), e.response.body.description)
+                          bot.sendMessage(chatId, responseMessages.error(e.response.body.description))
+                      })
+                } else {
+                    bot.sendMessage(chatId, textt)
+                      .then(() => bot.sendMessage(chatId, responseMessages.anotherOne))
+                      .catch(e => {
+                          console.log(new Date(), e.response.body.description)
+                          bot.sendMessage(chatId, responseMessages.error(e.response.body.description))
+                      })
+                }
+                break;
+            case('/roll@random_yumoreski_bot'):
+              // TODO: refactoring
                 const { text, photo } = await getRandomJokeWithConnectedDb();
 
                 if (photo) {
