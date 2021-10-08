@@ -60,6 +60,7 @@ const listenMessages = () => connectToMongo().then(() => {
                 }
                 break;
             case('/roll'):
+            case('/roll@random_yumoreski_bot'):
                 const { text, photo } = await getRandomJokeWithConnectedDb();
 
                 if (photo) {
