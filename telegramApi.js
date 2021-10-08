@@ -59,7 +59,7 @@ const listenMessages = () => connectToMongo().then(() => {
                     await bot.sendMessage(chatId, responseMessages.default);
                 }
                 break;
-            case('/roll'):
+            case('/roll' || '/roll@random_yumoreski_bot'):
                 const { text, photo } = await getRandomJokeWithConnectedDb();
 
                 if (photo) {
