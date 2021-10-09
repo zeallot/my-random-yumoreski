@@ -6,6 +6,7 @@ const {
     getStatisticWithConnectedDb,
     incMessageCountWithConnectedDb
 } = require('./mongoApi');
+const { translateToBraille } = require('./braille');
 
 
 // TODO: change to telegramToken
@@ -64,14 +65,45 @@ const listenMessages = () => connectToMongo().then(() => {
                 const { text, photo } = await getRandomJokeWithConnectedDb();
 
                 if (photo) {
-                    bot.sendPhoto(chatId, photo, { caption: text })
+                    let options = {
+                        caption: text,
+                    };
+                    if (chatId === ownerChatId && msg.chat.username === ownerUsername) {
+                        options.reply_markup = {
+                            inline_keyboard: [
+                                [
+                                    {
+                                        text: 'Запостить в "Анекдоты для слепых"',
+                                        callback_data: 'postToGroup'
+                                    }
+                                ]
+                            ]
+                        };
+                    }
+                    bot.sendPhoto(chatId, photo, options)
                       .then(() => bot.sendMessage(chatId, responseMessages.anotherOne))
                       .catch(e => {
                           console.log(new Date(), e.response.body.description)
                           bot.sendMessage(chatId, responseMessages.error(e.response.body.description))
                       })
                 } else {
-                    bot.sendMessage(chatId, text)
+                    let options = {};
+                    if (chatId === ownerChatId && msg.chat.username === ownerUsername) {
+                        options = {
+                            reply_markup: {
+                                inline_keyboard: [
+                                    [
+                                        {
+                                            text: 'Запостить в "Анекдоты для слепых"',
+                                            callback_data: 'postToGroup'
+                                        }
+                                    ]
+                                ]
+                            }
+                        };
+                    }
+
+                    bot.sendMessage(chatId, text, options)
                       .then(() => bot.sendMessage(chatId, responseMessages.anotherOne))
                       .catch(e => {
                           console.log(new Date(), e.response.body.description)
@@ -86,6 +118,18 @@ const listenMessages = () => connectToMongo().then(() => {
                 bot.sendMessage(chatId, responseMessages.default);
         }
       });
+
+    bot.on('callback_query', (callback_message) => {
+        if (callback_message.message.photo) {
+            bot.sendPhoto('@blind_jokes', callback_message.message.photo[0].file_id, { caption: translateToBraille(callback_message.message.caption)})
+              .then(() => console.log('send message to @blind_jokes'));
+
+        } else {
+            bot.sendMessage('@blind_jokes', translateToBraille(callback_message.message.text))
+              .then(() => console.log('send message to @blind_jokes'));
+
+        }
+    });
 });
 
 module.exports = {
