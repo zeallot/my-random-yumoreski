@@ -70,7 +70,7 @@ const chartVocab = {
   ';': '⠆',
   ':': '⠒',
   '.': '⠲',
-  '?': '⠦',
+  '?': '⠢',
   '!': '⠖',
   '(': '⠐⠣',
   ')': '⠐⠜',
@@ -107,7 +107,7 @@ const decodeFromBraille = (text) => {
   let res = '';
   let formattedText = text.toLowerCase();
   for (let letter of formattedText) {
-    res += getKeyByValue(ruVocabWithCharts, letter);
+    res += getKeyByValue(ruVocabWithCharts, letter) || letter;
   }
 
   return res;
