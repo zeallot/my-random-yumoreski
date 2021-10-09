@@ -119,7 +119,8 @@ const listenMessages = () => connectToMongo().then(() => {
         }
       });
 
-    bot.on('callback_query', (callback_message) => {
+    bot.on('callback_query',  async (callback_message) => {
+        console.log(callback_message);
         if (callback_message.message.photo) {
             bot.sendPhoto('@blind_jokes', callback_message.message.photo[0].file_id, { caption: translateToBraille(callback_message.message.caption)})
               .then(() => console.log('send message to @blind_jokes'));
@@ -129,6 +130,7 @@ const listenMessages = () => connectToMongo().then(() => {
               .then(() => console.log('send message to @blind_jokes'));
 
         }
+        await bot.answerCallbackQuery(callback_message.id);
     });
 });
 
