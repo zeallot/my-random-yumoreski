@@ -74,7 +74,20 @@ const getWallPostsCount = () => (
     .catch(e => console.log(e))
 );
 
+const sendMessageToVk = (ownerId, message) => (
+  connectToVk()
+    .then(async vk => {
+      vk.call('wall.post', {
+        owner_id: ownerId,
+        message,
+      });
+    })
+    .catch(e => console.log(e))
+);
+
+
 module.exports = {
     parseJokes,
     getWallPostsCount,
+    sendMessageToVk,
 }

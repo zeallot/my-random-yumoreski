@@ -4,8 +4,9 @@ const {
     connectToMongo,
     getRandomJokeWithConnectedDb,
     getStatisticWithConnectedDb,
-    incMessageCountWithConnectedDb
+    incMessageCountWithConnectedDb,
 } = require('./mongoApi');
+const { sendMessageToVk } = require('./vkApi');
 const { translateToBraille } = require('./braille');
 
 
@@ -120,14 +121,15 @@ const listenMessages = () => connectToMongo().then(() => {
       });
 
     bot.on('callback_query',  async (callback_message) => {
-        console.log(callback_message);
         if (callback_message.message.photo) {
             bot.sendPhoto('@blind_jokes', callback_message.message.photo[0].file_id, { caption: translateToBraille(callback_message.message.caption)})
               .then(() => console.log('send message to @blind_jokes'));
 
         } else {
-            bot.sendMessage('@blind_jokes', translateToBraille(callback_message.message.text))
+            const message = translateToBraille(callback_message.message.text);
+            bot.sendMessage('@blind_jokes', message)
               .then(() => console.log('send message to @blind_jokes'));
+            await sendMessageToVk(-162704615, message)
 
         }
         await bot.answerCallbackQuery(callback_message.id);
