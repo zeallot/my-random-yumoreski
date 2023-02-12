@@ -5,6 +5,7 @@ const {
 } = require('./mongoApi');
 const { sendMessageToVk } = require('./vkApi');
 const { translateToBraille } = require('./braille');
+require('dotenv').config();
 
 
 const bot = new TelegramBot(process.env.TELEGRAM_TOKEN, { polling: true });
