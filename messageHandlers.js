@@ -1,5 +1,4 @@
 const {getRandomJokeWithConnectedDb, getStatisticWithConnectedDb} = require('./mongoApi');
-const {ownerChatId, ownerUsername} = require('./config');
 
 let lastMessageCount = 0;
 let lastUserCount = 0;
@@ -31,7 +30,7 @@ const onRollJoke = async (bot, chatId, msg) => {
     let options = {
       caption: text,
     };
-    if (chatId === ownerChatId && msg.chat.username === ownerUsername) {
+    if (chatId === process.env.OWNER_CHAT_ID && msg.chat.username === process.env.OWNER_USERNAME) {
       options.reply_markup = {
         inline_keyboard: [
           [
@@ -51,7 +50,7 @@ const onRollJoke = async (bot, chatId, msg) => {
       })
   } else {
     let options = {};
-    if (chatId === ownerChatId && msg.chat.username === ownerUsername) {
+    if (chatId === process.env.OWNER_CHAT_ID && msg.chat.username === process.env.OWNER_USERNAME) {
       options = {
         reply_markup: {
           inline_keyboard: [
@@ -76,7 +75,7 @@ const onRollJoke = async (bot, chatId, msg) => {
 }
 
 const onStat = async (bot, chatId, msg) => {
-  if (chatId === ownerChatId && msg.chat.username === ownerUsername) {
+  if (chatId === process.env.OWNER_CHAT_ID && msg.chat.username === process.env.OWNER_USERNAME) {
     const { messageCount, userList } = await getStatisticWithConnectedDb();
     bot.sendMessage(chatId, responseMessages.statistic(messageCount,  userList.length), {parse_mode: 'Markdown'})
       .then(() => {

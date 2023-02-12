@@ -1,5 +1,4 @@
 const easyvk = require('easyvk');
-const { vkLogin, vkPassword } = require('./config');
 
 const formatJokes = (jokes) => {
     return jokes.flatMap((joke) => {
@@ -20,8 +19,8 @@ const formatJokes = (jokes) => {
 
 const connectToVk = () => {
     return easyvk({
-        username: vkLogin,
-        password: vkPassword,
+        username: process.env.VK_LOGIN,
+        password: process.env.VK_PASSWORD,
     });
 }
 
