@@ -1,6 +1,5 @@
 const { listenMessages } = require('./telegramApi');
 const mongoose = require('mongoose');
-require('dotenv').config();
 // const { parseJokes } = require('./vkApi');
 // const { writeMany } = require('./mongoApi');
 
