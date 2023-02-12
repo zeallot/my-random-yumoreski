@@ -1,6 +1,5 @@
 const express = require('express')
 const mongoose = require('mongoose');
-const {mongoLink} = require('./config');
 const {getRandomJokeWithConnectedDb} = require('./mongoApi');
 const app = express()
 
@@ -15,7 +14,7 @@ app.get('/randomJoke', async (req, res) => {
   res.json(joke);
 })
 
-mongoose.connect(mongoLink)
+mongoose.connect(process.env.MONGO_LINK)
   .then(async () => {
     console.log('connected to mongo');
     app.listen(port, host, () => {

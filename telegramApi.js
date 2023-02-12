@@ -1,4 +1,3 @@
-const { telegramToken } = require('./config');
 const TelegramBot = require('node-telegram-bot-api');
 const { onStartMessage, onDefaultMessage, onRollJoke, onStat} = require('./messageHandlers');
 const {
@@ -8,8 +7,7 @@ const { sendMessageToVk } = require('./vkApi');
 const { translateToBraille } = require('./braille');
 
 
-// TODO: change to telegramToken
-const bot = new TelegramBot(telegramToken, { polling: true });
+const bot = new TelegramBot(process.env.TELEGRAM_TOKEN, { polling: true });
 
 const ONE_DAY = 86400000;
 
